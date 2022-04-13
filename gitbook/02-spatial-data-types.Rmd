@@ -1,6 +1,8 @@
 # Spatial Data Types
 
-What are the types of spatial data. In this chapter we discuss
+What are the types of spatial data? In this chapter we discuss how to format your data into the correct types of spatial object.
+
+Inlabru is currently undergoing changes in the way that spatial data is handled. Although it currently requires sp spatial objects, there will be a move away from this in future. [See this vignette by Jafet Belmont for more details.](https://rpubs.com/jafet089/880416)
 
 ## Points
 
