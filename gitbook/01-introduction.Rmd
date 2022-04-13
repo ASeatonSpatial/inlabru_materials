@@ -24,11 +24,47 @@ ggplot() +
   coord_equal()
 ```
 
-## This is a new section
+## Useful Resources
 
-New stuff.
+This section includes links to useful websites, tutorials, books, and papers.
 
+* [INLA website](https://www.r-inla.org/)
+* [INLA Discussion Group](https://groups.google.com/g/r-inla-discussion-group)
+* [Tutorials for inlabru version 2.1.13](https://sites.google.com/inlabru.org/inlabru/tutorials)
+* [Tutorials for inlabru version 2.2.4 and newer](https://inlabru-org.github.io/inlabru/)
+* [Online Course Topics on INLA, Bayesian modeling, the SPDE approach, and spatial/temporal modeling - Haakon Bakka](https://haakonbakkagit.github.io/index.html)
+* [Vignettes on Spatial Data Structures and Building a Mesh in INLA - Jafet Belmont](https://rpubs.com/jafet089)
+* [Helper functions for mesh construction with the barrier model - James Grecian](https://github.com/jamesgrecian/mapr)
+* [R-INLA Tutorial on SPDE Models - Elias T. Krainski, Finn Lindgren, Daniel Simpson and Håvard Rue](https://folk.ntnu.no/fuglstad/Lund2016/Session6/spde-tutorial.pdf)
+* [Bayesian Inference with INLA - Virgilio Gómez-Rubio](https://becarioprecario.bitbucket.io/inla-gitbook/)
 
-## Megan's test change 
+## Reading List
 
-Testing making changes
+This section contains papers that may be useful to read for future sessions. 
+
+* [How do covariates interact with spatial random effects?](https://www.tandfonline.com/doi/abs/10.1198/tast.2010.10052) (for the sessions on fields and covariates)
+* [Choosing block spatial resolution in block cross-validation](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13107) (for the session on model assessment)
+
+## Meeting Series Timeline
+Date | Meeting Topic
+---- | -------------
+15/03/2022 | Planning discussion topics
+22/03/2022 | Spatial data structures
+29/03/2022 | Basics of mesh construction
+05/04/2022 | <span style="color: red;">N/A - no meeting</span>
+12/04/2022 | Catch-up meeting
+19/04/2022 | How do inlabru model components work under the hood?
+26/04/2022 | Boundaries
+03/05/2022 | Mesh properties
+10/05/2022 | Prior choice
+17/05/2022 | <span style="color: red;">N/A - no meeting</span>
+24/05/2022 | Covariates
+31/05/2022 | Fields
+07/06/2022 | Reducing computational cost
+14/06/2022 | Model comparison
+21/06/2022 | Model assessment
+28/06/2022 | <span style="color: red;">N/A - no meeting</span>
+05/07/2022 | Presenting and interpreting results
+12/07/2022 | Joint models
+19/07/2022 | Sampling
+26/07/2022 | Excursions
