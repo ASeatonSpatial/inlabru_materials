@@ -1,0 +1,29 @@
+--- 
+title: "inlabru learning materials"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+link-citations: yes
+github-repo: ASeatonSpatial/inlabru_materials
+---
+
+```{r setup, include=FALSE}
+# Set knitr options applied to all R chunks
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE)
+```
+
+# About these notes
+
+These notes contain cool stuff you might need to know about doing applied statistical modelling using inlabru.
+
+The following people contributed to the development of these notes:
+
+- Person 1
+- Person 2
+- Person 3
+
+

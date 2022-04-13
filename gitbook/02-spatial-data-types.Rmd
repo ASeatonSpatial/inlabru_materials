@@ -1,0 +1,32 @@
+# Spatial Data Types
+
+What are the types of spatial data. In this chapter we discuss
+
+## Points
+
+Dots like I showed above.  But how did I make that plot in Chapter 1?  Here is an example of including code that is not run:
+
+```{r 02_plot_code_not_run, eval=FALSE}
+# Note that each chunk can be given a name, useful for debugging error messages
+# eval=FALSE means the code is not run.
+ggplot() +
+  gg(gorillas$nests) + 
+  gg(gorillas$boundary) + 
+  coord_equal()
+
+```
+
+
+## Lines
+
+Squiggles
+
+## Polygons
+
+Shapes
+
+## Pixels (or raster, tile)
+
+Photos
+
+## Outstanding questions

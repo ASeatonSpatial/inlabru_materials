@@ -1,0 +1,28 @@
+```{r, include=FALSE}
+# At the top of each .Rmd file have a preamble chunk to load anything you want to load secretly in the background. e.g.
+library(inlabru)
+library(ggplot2)
+data(gorillas)
+
+# I think we want each .Rmd file to be able to work as a stand-alone file
+# so we don't need to compile the whole book or run previous chapters to
+# check things are working here.
+```
+
+
+# Introduction
+
+This is an introduction to these notes.
+
+This is about inlabru.  inlabru has data on gorilla nests:
+
+```{r 01_gorillas_plot, echo=FALSE}
+# echo=FALSE hides the code but it is still run
+ggplot() +
+  gg(gorillas$nests) + 
+  gg(gorillas$boundary) + 
+  coord_equal()
+```
+
+
+
