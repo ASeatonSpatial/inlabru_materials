@@ -1,3 +1,5 @@
+# Mesh Construction
+
 ```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(sp)
@@ -27,11 +29,11 @@ boundary <-  gBuffer(buf2, width=bshrink)
 
 Some very useful online topics on mesh construction:  https://haakonbakkagit.github.io/index.html - Haakon Bakka. Some of the content of this document is taken from here.
 
-# Mesh Parameters
+## Mesh Parameters
 
 Parameters are on the scale of spatial coordinates (e.g., if working in Easting and Northing, the parameters will be in km).
 
-## `max.edge`
+### `max.edge`
 
 * `max.edge` defines the maximum length of triangle edges. Lower values mean smaller triangles, resulting in a finer overall mesh.
 * `max.edge` can have one or two input values. 
@@ -42,7 +44,7 @@ Parameters are on the scale of spatial coordinates (e.g., if working in Easting 
   + Initially, if we have no other prior knowledge about the SPDE range parameter, we can approximate it as 1/3 of the study area, but it should then be replaced once a posterior estimate is obtained. The `max.edge` should then be between 1/10 and 1/5 of this spatial range value.
 * A mesh with a finer resolution will lead to a higher number of mesh nodes, resulting in a model with a longer running time. So, when choosing a value for `max.edge`, consider the size of the study area and look at the number of nodes in your resulting mesh. 
 
-## `min.angle`
+### `min.angle`
 
 * `min.angle` defines the minimum angles at which triangles join.
 * `min.angle` can have one or two input values. 
@@ -50,7 +52,7 @@ Parameters are on the scale of spatial coordinates (e.g., if working in Easting 
   + Two values relate to the specification for the inner mesh (inside the inner mesh boundary) and outer mesh (between the inner and outer mesh boundaries).
 * I believe changing `min.angle` has a similar effect on the overall mesh to changing `max.edge`, but with a less intuitive interpretation. I would therefore avoid specifying this parameter explicitly in mesh construction.
 
-## `offset`
+### `offset`
 
 * `offset` defines the extension distance for the mesh boundaries.
 * `offset` can have one or two input values.
@@ -61,7 +63,7 @@ Parameters are on the scale of spatial coordinates (e.g., if working in Easting 
 * The effectiveness of our outer boundary on buffering the Boundary Effect can be evaluated using the meshbuilder() tool (example below).
 * If negative, `offset` is interpreted as a factor relative to the approximate data diameter.
 
-## `cutoff`
+### `cutoff`
 
 * `cutoff` defines the minimum allowed distance between points. Points which are at most as far apart as this are replaced by a single vertex.
 * In other words, `cutoff` represents the minimum distance across which two vertices are required, and so works in tandem with `max.edge` to determine mesh resolution.
@@ -69,17 +71,17 @@ Parameters are on the scale of spatial coordinates (e.g., if working in Easting 
   + When using points as a base to build a mesh from, we can end up with clusters of small triangles around these points. Increasing `cutoff` smooths this out, so that all triangles in the inner mesh are a similar size. A `cutoff` value of `max.edge`/5 usually evens out clustering.
 * Decreasing the `cutoff` value can help to better represent complex boundaries such as coastlines, as the number of triangles along complex edges is increased. A larger `cutoff` value may smooth over these edges, resulting in a simplified representation of the boundary.
 
-## `boundary`
+### `boundary`
 
 * `boundary` can be used to include a polygon for the area of interest, and is used to create the inner mesh boundary.
 * There should be at least 1 'spatial range' (i.e., posterior SPDE range parameter) between the boundary and any point. If this is not known, it can be initially approximated as 1/3 of the study area, but should then be replaced once a posterior estimate is obtained.
 
-## `locs`
+### `locs`
 
 * `locs` can be used to define point locations from which to build the initial triangulation nodes of the mesh.
 * This can result in clustering of mesh nodes around point locations, which if undesired, can be fixed using the `cutoff` parameter.
 
-# Building a mesh
+## Building a mesh
 
 If we don't have a good prior understanding of what our spatial range might be, we can initially approximate it with 1/3 of the study range. Then, we create the value max_edge, which could be between 1/10 and 1/5 of this value. The `max.edge` is max_edge for the inner mesh, and 5$\times$ max_edge for the outer mesh. The cutoff is max_edge/5. The offset is max_edge for the inner boundary, and 5$\times$ max_edge for the outer boundary.
 
@@ -97,7 +99,7 @@ ggplot() +
   gg(mesh)
 ```
 
-# Evaluating a mesh
+## Evaluating a mesh
 
 Most mesh evaluation can be done visually, by plotting the mesh. We can then check to see if it looks 'reasonable' (no undesired clustering, good extension of outer boundary, fine resolution in inner boundary). 
 
