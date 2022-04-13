@@ -104,3 +104,11 @@ ggplot() +
 Most mesh evaluation can be done visually, by plotting the mesh. We can then check to see if it looks 'reasonable' (no undesired clustering, good extension of outer boundary, fine resolution in inner boundary). 
 
 We can also check the number of mesh nodes with `mesh$n`. The computational time grows proportional to $n^{3/2}$. If we expect our mesh is too fine and so our model will be computationally inefficient to run, we can reduce the number of nodes by creating a coarser mesh (using `cutoff` and `max.edge`).
+
+## Questions and Answers
+
+## Outstanding Questions
+
+* __How does the mesh affect the model output? In particular: how the spatial random effects (mesh and priors for correlation model) create bias in the aggregate rate across the spatial domain (effects lambda)?__
+* __How do you deal with islands when building a mesh? If you simplify the boundary you could lose islands, how do you avoid this?__
+  

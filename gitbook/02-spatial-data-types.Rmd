@@ -56,6 +56,5 @@ Stuff we aren't sure about yet but will try to find out and update this document
 
 * __If using a pixels object, covariates should be known everywhere within the outer mesh boundary. Otherwise, INLA will attempt to impute any missing (NA) values which slows down modelling. What is INLA doing when it imputes these values?__
 * __What should you do if your covariates don't exist outside the inner mesh boundary, and your boundaries are arbitrary (soft) and not physical (hard)?__
-* __How do you deal with islands when building a mesh? If you simplify the boundary you could lose islands, how do you avoid this?__
 * __In inlabru, you need to ensure that all of your spatial objects are set to the same CRS, or this will create issues when modelling. Is there a function or feature in inlabru which automatically transforms all objects to a given CRS when modelling?__
   + Haven't found an option for this yet. Current advice is to name your target CRS at the top of the file where you are creating model objects, then create or transform objects with this as the CRS. e.g.: `t.proj <- CRS("EPSG:27700") ## British National Grid` Then in objects: `proj4string=t.proj` Or: `spTransform(object, t.proj)`
