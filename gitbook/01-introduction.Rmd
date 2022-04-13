@@ -24,5 +24,7 @@ ggplot() +
   coord_equal()
 ```
 
+## This is a new section
 
+New stuff.
 
