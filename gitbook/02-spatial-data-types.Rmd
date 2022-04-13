@@ -35,12 +35,21 @@ Spatial covariates can be formatted pixels (e.g., SpatialPixelsDataFrame or equi
 
 Usually, we are interested in predicting into continuous space, and so we can use a pixels object to make this prediction. This should also contain all covariate information needed for the prediction.
 
+## Questions and Answers
 
+* __To evaluate a covariate at arbitrary points in the survey region, do we still need to define a function (x,y) or is it enough to define covariate as a pixels object (e.g., SpatialPixelsDataFrame)?__
+  + Define covariates as a pixels object (SpatialPixelsDataFrame) and then, when defining the model components, call the name of the layer (the column with covariate names inside the SpatialPixelsDataFrame) and then the name of the pixel data frame. For example:  `cov_pxl(elev, model="linear")`.
+  + Covariates can be stored as different columns all in one SpatialPixelsDataFrame. For example: `cov_pxl(elev, model="linear") + cov_pxl(temp, model="linear")`
+  + If the covariate is measured at point locations only, and you are only interested in it at these locations (such as in geostatistical models or mark likelihoods in marked point processes) it can just be a column in the points object. 
+* __What should you do if your covariates don't exist outside the inner mesh boundary?__
+  + If you have a hard physical boundary (such as a coastline when your study species can only be in water) you can use the barrier model. [See these examples on the Barrier model by Haakon Bakka.](https://haakonbakkagit.github.io/organisedtopics.html#stream-4-barrier-model)
+* __When should you use the inlabru function `bru_fill_missing()`?__
+  + [See this vignette by Jafet Belmont.](https://rpubs.com/jafet089/883639)
 
 ## Outstanding questions
 
 Stuff we aren't sure about yet but will try to find out and update this document in the future:
 
-- Thinymabob
-- Whodyacomewhatsit
-- Whateveritis
+* __If using a pixels object, covariates should be known everywhere within the outer mesh boundary. Otherwise, INLA will attempt to impute any missing (NA) values which slows down modelling. What is INLA doing when it imputes these values?__
+* __What should you do if your covariates don't exist outside the inner mesh boundary, and your boundaries are arbitrary (soft) and not physical (hard)?__
+* __How do you deal with islands when building a mesh? If you simplify the boundary you could lose islands, how do you avoid this?__
