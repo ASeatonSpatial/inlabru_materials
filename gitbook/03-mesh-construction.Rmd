@@ -1,0 +1,104 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(sp)
+library(INLA)
+library(inlabru)
+library(ggplot2)
+options("rgdal_show_exportToProj4_warnings"="none")
+
+## Points
+xmin=0;ymin=0;xmax=10;ymax=10 ## bounding box
+A=(ymax-ymin)*(xmax-xmin) ## area of box
+lambda=2 ## point process intensity
+npts=rpois(n=1,lambda=A*lambda) ## number of points
+df <- data.frame(x=runif(n=npts,min=xmin,max=xmax),
+                 y=runif(n=npts,min=ymin,max=ymax)) ## point data
+t.proj <- CRS("EPSG:27700") ## British National Grid
+pts <- SpatialPointsDataFrame(SpatialPoints(coords=matrix(c(df$x,df$y),ncol=2,byrow=FALSE,dimnames=list(NULL,c("x", "y"))),bbox=NULL,proj4string=t.proj),data=df)
+
+## Boundary
+library(rgeos)
+bstart <- 1
+bshrink <- 0.7
+buf1 <- gBuffer(pts, width=bstart, byid=TRUE)
+buf2 <- gUnaryUnion(buf1)
+boundary <-  gBuffer(buf2, width=bshrink)
+```
+
+Some very useful online topics on mesh construction:  https://haakonbakkagit.github.io/index.html - Haakon Bakka. Some of the content of this document is taken from here.
+
+# Mesh Parameters
+
+Parameters are on the scale of spatial coordinates (e.g., if working in Easting and Northing, the parameters will be in km).
+
+## `max.edge`
+
+* `max.edge` defines the maximum length of triangle edges. Lower values mean smaller triangles, resulting in a finer overall mesh.
+* `max.edge` can have one or two input values. 
+  + One value would be used for a mesh with no outer boundary extension (not recommended). 
+  + Two values relate to the specification for the inner mesh (inside the inner mesh boundary) and outer mesh (between the inner and outer mesh boundaries).
+* In the outer mesh, `max.edge` can be very large, as we are not interested in fine-scale inference for this area. We also want this to be a large value to improve computational efficiency, as the number of nodes in the mesh is proportional to the running time of the model.
+* In the inner mesh, we need to have a fine enough resolution to capture the processes we are interested in. This means that we want the `max.edge` to be smaller than the spatial range across which we would expect our points to be correlated (SPDE range parameter). 
+  + Initially, if we have no other prior knowledge about the SPDE range parameter, we can approximate it as 1/3 of the study area, but it should then be replaced once a posterior estimate is obtained. The `max.edge` should then be between 1/10 and 1/5 of this spatial range value.
+* A mesh with a finer resolution will lead to a higher number of mesh nodes, resulting in a model with a longer running time. So, when choosing a value for `max.edge`, consider the size of the study area and look at the number of nodes in your resulting mesh. 
+
+## `min.angle`
+
+* `min.angle` defines the minimum angles at which triangles join.
+* `min.angle` can have one or two input values. 
+  + One value would be used for a mesh with no outer boundary extension (not recommended). 
+  + Two values relate to the specification for the inner mesh (inside the inner mesh boundary) and outer mesh (between the inner and outer mesh boundaries).
+* I believe changing `min.angle` has a similar effect on the overall mesh to changing `max.edge`, but with a less intuitive interpretation. I would therefore avoid specifying this parameter explicitly in mesh construction.
+
+## `offset`
+
+* `offset` defines the extension distance for the mesh boundaries.
+* `offset` can have one or two input values.
+  + One value would be used for a mesh with no outer boundary extension (not recommended). 
+  + Two values relate to the specification for the inner mesh (inside the inner mesh boundary) and outer mesh (between the inner and outer mesh boundaries).
+* An outer boundary extension is required to buffer the Boundary Effect. The Boundary Effect is an increase in the SD of estimates near the boundary, due to a boundary condition imposed on the SPDE. In order to avoid this, we create a boundary extension, leaving this effect at the outer boundary, so it doesn't impact our area of interest (within the inner boundary).
+* A general rule is to use 1$\times$ the `max.edge` for the inner boundary `offset` and 5$\times$ the `max.edge` for the outer boundary `offset`.
+* The effectiveness of our outer boundary on buffering the Boundary Effect can be evaluated using the meshbuilder() tool (example below).
+* If negative, `offset` is interpreted as a factor relative to the approximate data diameter.
+
+## `cutoff`
+
+* `cutoff` defines the minimum allowed distance between points. Points which are at most as far apart as this are replaced by a single vertex.
+* In other words, `cutoff` represents the minimum distance across which two vertices are required, and so works in tandem with `max.edge` to determine mesh resolution.
+* The main purpose of `cutoff` is to even-out the size of triangles in the mesh, so that all triangles in the area of interest (inside the inner mesh boundary) are a similar size. 
+  + When using points as a base to build a mesh from, we can end up with clusters of small triangles around these points. Increasing `cutoff` smooths this out, so that all triangles in the inner mesh are a similar size. A `cutoff` value of `max.edge`/5 usually evens out clustering.
+* Decreasing the `cutoff` value can help to better represent complex boundaries such as coastlines, as the number of triangles along complex edges is increased. A larger `cutoff` value may smooth over these edges, resulting in a simplified representation of the boundary.
+
+## `boundary`
+
+* `boundary` can be used to include a polygon for the area of interest, and is used to create the inner mesh boundary.
+* There should be at least 1 'spatial range' (i.e., posterior SPDE range parameter) between the boundary and any point. If this is not known, it can be initially approximated as 1/3 of the study area, but should then be replaced once a posterior estimate is obtained.
+
+## `locs`
+
+* `locs` can be used to define point locations from which to build the initial triangulation nodes of the mesh.
+* This can result in clustering of mesh nodes around point locations, which if undesired, can be fixed using the `cutoff` parameter.
+
+# Building a mesh
+
+If we don't have a good prior understanding of what our spatial range might be, we can initially approximate it with 1/3 of the study range. Then, we create the value max_edge, which could be between 1/10 and 1/5 of this value. The `max.edge` is max_edge for the inner mesh, and 5$\times$ max_edge for the outer mesh. The cutoff is max_edge/5. The offset is max_edge for the inner boundary, and 5$\times$ max_edge for the outer boundary.
+
+```{r, warning=FALSE, message=FALSE}
+range <- diff(range(df$x))/3
+max_edge <- range/5
+mesh <- inla.mesh.2d(boundary = boundary,
+                      max.edge = c(1,5)*max_edge,
+                      cutoff = max_edge/5,
+                      offset = c(max_edge,range))
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot() +
+  gg(mesh)
+```
+
+# Evaluating a mesh
+
+Most mesh evaluation can be done visually, by plotting the mesh. We can then check to see if it looks 'reasonable' (no undesired clustering, good extension of outer boundary, fine resolution in inner boundary). 
+
+We can also check the number of mesh nodes with `mesh$n`. The computational time grows proportional to $n^{3/2}$. If we expect our mesh is too fine and so our model will be computationally inefficient to run, we can reduce the number of nodes by creating a coarser mesh (using `cutoff` and `max.edge`).
