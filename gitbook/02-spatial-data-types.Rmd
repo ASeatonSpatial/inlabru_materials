@@ -30,3 +30,9 @@ Shapes
 Photos
 
 ## Outstanding questions
+
+Stuff we aren't sure about yet but will try to find out and update this document in the future:
+
+- Thinymabob
+- Whodyacomewhatsit
+- Whateveritis
