@@ -4,6 +4,10 @@ What are the types of spatial data. In this chapter we discuss
 
 ## Points
 
+Point process and geostatistical data can be formatted as points (e.g., SpatialPointsDataFrame or equivalent), which contain the coordinate locations of data points as well as a data.frame of associated information. If we want to include covariate information in the model which is only relevant at the point locations (e.g., if the points are representing habitat patches, the area of these patches) then this can be included as part of the points object.
+
+If we are only interested in predicting to point locations (as opposed to continuously across space) then we can also predict to a points object. This should contain all covariate information needed for the prediction.
+
 Dots like I showed above.  But how did I make that plot in Chapter 1?  Here is an example of including code that is not run:
 
 ```{r 02_plot_code_not_run, eval=FALSE}
@@ -19,15 +23,19 @@ ggplot() +
 
 ## Lines
 
-Squiggles
+If we are using the ‘samplers’ argument to define line transects, these can be formatted as a lines object (e.g., SpatialLinesDataFrame or equivalent). 
 
 ## Polygons
 
-Shapes
+If we are using the ‘samplers’ argument to define the boundary of our area of interest, this should be a polygon object (e.g., SpatialPolygonsDataFrame or equivalent). We can also use ‘samplers’ to define several sampling subplots, formatted as polygons in a single polygons object.
 
 ## Pixels (or raster, tile)
 
-Photos
+Spatial covariates can be formatted pixels (e.g., SpatialPixelsDataFrame or equivalent). This is a grid over the study area which contains information for each grid cell (pixel). Several covariates can be stored in one pixels object as different columns in the data.frame (i.e., column refers to variable and row refers to pixel).
+
+Usually, we are interested in predicting into continuous space, and so we can use a pixels object to make this prediction. This should also contain all covariate information needed for the prediction.
+
+
 
 ## Outstanding questions
 
