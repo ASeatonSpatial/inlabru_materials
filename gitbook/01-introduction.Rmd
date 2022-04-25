@@ -54,17 +54,20 @@ Date | Meeting Topic
 05/04/2022 | <span style="color: red;">N/A - no meeting</span>
 12/04/2022 | Catch-up meeting
 19/04/2022 | How do inlabru model components work under the hood?
-26/04/2022 | Boundaries
-03/05/2022 | Mesh properties
-10/05/2022 | Prior choice
+26/04/2022 | <span style="color: red;">N/A - no meeting</span>
+03/05/2022 | <span style="color: red;">N/A - no meeting</span>
+10/05/2022 | Inlabru model components and spatial data structures
 17/05/2022 | <span style="color: red;">N/A - no meeting</span>
-24/05/2022 | Covariates
-31/05/2022 | Fields
-07/06/2022 | Reducing computational cost
-14/06/2022 | Model comparison
-21/06/2022 | Model assessment
+24/05/2022 | Boundaries
+31/05/2022 | Mesh Properties
+07/06/2022 | Prior choice
+14/06/2022 | Covariates
+21/06/2022 | Fields
 28/06/2022 | <span style="color: red;">N/A - no meeting</span>
-05/07/2022 | Presenting and interpreting results
-12/07/2022 | Joint models
-19/07/2022 | Sampling
-26/07/2022 | Excursions
+05/07/2022 | Reducing computational cost
+12/07/2022 | Model comparison
+19/07/2022 | Model assessment
+26/07/2022 | Presenting and interpreting results
+02/08/2022 | Joint models
+09/08/2022 | Sampling
+16/08/2022 | Excursions
